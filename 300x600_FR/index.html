@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Razer Immersive Line EN 300x600</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="ad.size" content="width=300,height=600">
+	<link rel=StyleSheet HREF="main.css" type="text/css">
+    <!-- Studio Enabler Required -->
+    <script src="https://s0.2mdn.net/ads/studio/Enabler.js"></script>
+</head>
+<body>
+
+    <div id="container">
+        <div id="border"></div>
+        <!-- Exit -->
+        <button id="exit"></button>
+        <div id="anim_container">
+
+            <img class="posAb" id="backup" src="backup.jpg" />
+            <div class="posAb full" id="base"></div>
+
+            <div id='usp-holder' class="posAb full">
+                <div class="feature posAb full" id="f1">
+                    <img class="posAb" id="frame1_bg" src="frame1_bg.jpg" />
+                    <!-- <img class="posAb" id="copy1" src="copy1.png" /> -->
+                </div>
+                <div class="feature posAb full" id="f2">
+                    <video class="vid posAb" id="frame2_video" muted playsinline></video>
+                    <img class="posAb" id="frame2_lockup" src="frame2_lockup.png" />
+                    <img class="posAb" id="copy2" src="copy2.png" />
+                </div>
+                <div class="feature posAb full" id="f3">
+                    <video class="vid posAb" id="frame3_video" muted playsinline></video>
+                    <img class="posAb" id="frame3_lockup" src="frame3_lockup.png" />
+                    <img class="posAb" id="copy3" src="copy3.png" />
+                </div>
+                <div class="feature posAb full" id="f4">
+                    <video class="vid posAb" id="frame4_video" muted playsinline></video>
+                    <img class="posAb" id="frame4_lockup" src="frame4_lockup.png" />
+                    <img class="posAb" id="copy4" src="copy4.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Greensock Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.2/TweenMax.min.js"></script>
+    <script type="text/javascript">
+        // Global Variables
+        var tl = new TimelineLite();
+        var id = function(name){
+            return document.getElementById(name);
+        }
+        var feature_tl;
+        var featureAnimating;
+        var clickedthrough;
+
+        // Functionality
+        ad = {
+            init: function(){
+                var isInitialized = Enabler.isInitialized();
+                  isInitialized ? ad.start() : Enabler.addEventListener(studio.events.StudioEvent.INIT, ad.start);
+            },
+            start: function(){
+                ad.anim();
+                id('exit').addEventListener('click', ad.bgExitHandler, false);
+            },
+            anim: function() {
+
+                if(clickedthrough){
+                    return false;
+                }
+
+                //frame 2 video
+                var frame2_video = document.getElementById("frame2_video");
+
+                var frame2_video_source = document.createElement('source')
+                frame2_video_source.setAttribute('type', 'video/mp4')
+                frame2_video_source.setAttribute('src', getVideoUrl('vid1.mp4'))
+                frame2_video.appendChild(frame2_video_source);
+
+                //frame 3 video
+                var frame3_video = document.getElementById("frame3_video");
+
+                var frame3_video_source = document.createElement('source')
+                frame3_video_source.setAttribute('type', 'video/mp4')
+                frame3_video_source.setAttribute('src', getVideoUrl('vid2.mp4'))
+                frame3_video.appendChild(frame3_video_source);
+
+                //frame 4 video
+                var frame4_video = document.getElementById("frame4_video");
+
+                var frame4_video_source = document.createElement('source')
+                frame4_video_source.setAttribute('type', 'video/mp4')
+                frame4_video_source.setAttribute('src', getVideoUrl('vid3.mp4'))
+                frame4_video.appendChild(frame4_video_source);
+
+                tl.set(id('f1'), {x:-300}, "init")
+                  .fromTo(id('usp-holder'), .8, {opacity:0}, {opacity:1, ease: Power3.easeInOut, onStart: function(){
+                    // TweenMax.fromTo(id('copy1'), 1, {opacity:0, y:10}, {opacity:1, y:0, ease: Power3.easeInOut, delay:.5});
+                    TweenMax.delayedCall(.1, function(){
+                        ad.featureTimeline();
+                    });
+                  }}, "intro+=.1")
+                
+            },
+            featureTimeline: function(){
+                featureAnimating = true;
+                feature_tl = new TimelineMax({ repeat: -1, repeatDelay:0 })
+                feature_tl.to([id('f1'), id('f2')], 1.2, {x:'-=300', ease: Power3.easeInOut, onStart: function(){
+                                TweenMax.delayedCall(.5, function(){
+                                    frame2_video.currentTime = 0;
+                                    frame2_video.play();
+                                });
+                                TweenMax.fromTo(id('copy2'), 1, {opacity:0, y:5}, {opacity:1, y:0, ease: Power3.easeInOut, delay:.5});
+                            }, onComplete: function(){
+                                TweenMax.set(id('f1'), {x:0});
+                          }}, "feature+=3")
+                          .to([id('f2'), id('f3')], 1.2, {x:'-=300', ease: Power3.easeInOut, onStart: function(){
+                                TweenMax.delayedCall(.5, function(){
+                                    frame3_video.currentTime = 0;
+                                    frame3_video.play();
+                                });
+                                TweenMax.fromTo(id('copy3'), 1, {opacity:0, y:5}, {opacity:1, y:0, ease: Power3.easeInOut, delay:.5});
+                            },onComplete: function(){
+                                TweenMax.set(id('f2'), {x:0});
+                          }}, "feature+=7")
+                          .to([id('f3'), id('f4')], 1.2, {x:'-=300', ease: Power3.easeInOut, onStart: function(){
+                                TweenMax.delayedCall(.5, function(){
+                                    frame4_video.currentTime = 0;
+                                    frame4_video.play();
+                                });
+                                TweenMax.fromTo(id('copy4'), 1, {opacity:0, y:5}, {opacity:1, y:0, ease: Power3.easeInOut, delay:.5});
+                            },onComplete: function(){
+                                TweenMax.set(id('f3'), {x:0});
+                          }}, "feature+=11")
+                         .to([id('f4'), id('f1')], 1.2, {x:'-=300', ease: Power3.easeInOut, onStart: function(){
+                                // TweenMax.fromTo(id('copy1'), 1, {opacity:0, y:5}, {opacity:1, y:0, ease: Power3.easeInOut, delay:.5});
+                            },onComplete: function(){
+                                TweenMax.set(id('f4'), {x:0});
+                          }}, "feature+=15")
+            },
+            bgExitHandler: function() {
+                Enabler.exit('default');
+                // tl.kill();
+                // TweenMax.set(id('usp-holder'), {y:0});
+                if(!featureAnimating){
+                    TweenMax.set([id('f2'), id('f3')], {x:0});
+                    TweenMax.set(id('f1'), {x:-300});
+                    ad.featureTimeline();
+                }
+                clickedthrough = true;
+            }
+        }
+
+        function getVideoUrl(filename) {
+          if (Enabler.isServingInLiveEnvironment()) {
+            return Enabler.getUrl(filename);
+          } else {
+            return filename;
+          }
+        }
+
+        // Ad Initialisation
+        window.addEventListener('load', ad.init);
+    </script>
+</body>
+</html>
